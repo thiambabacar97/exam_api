@@ -27,9 +27,10 @@ public class AppRolesController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public AppRoles createAppRoles(@Valid @RequestBody AppRoles appRoles) {
-        return appRolesService.createAppRoles(appRoles);
+    public AppRoles createAppRoles(@Valid @RequestBody AppRoles appRole) {
+        return appRolesService.createAppRoles(appRole);
     }
+
 
     @PutMapping("/{id}")
     public AppRoles updateAppRoles(@PathVariable("id") int id, @Valid @RequestBody AppRoles appRoles) {

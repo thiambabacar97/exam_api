@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class AppRoles {
     private int id;
-    @NotNull(message = "Le nom ne doit pas etre null")
+   // @NotNull(message = "Le nom ne doit pas etre null")
     private String nom;
 
 }
