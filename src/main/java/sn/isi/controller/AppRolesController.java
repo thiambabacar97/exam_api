@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/roles")
 @AllArgsConstructor
 public class AppRolesController {
     private AppRolesService appRolesService;

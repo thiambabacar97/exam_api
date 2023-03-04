@@ -4,20 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sn.isi.doa.IAppUserRepository;
-import sn.isi.dto.AppUser;
 import sn.isi.entities.AppUserEntity;
-import sn.isi.entities.ExperienceProfessionelEntity;
 import sn.isi.exception.EntityNotFoundException;
-import sn.isi.exception.RequestException;
 import sn.isi.mapping.AppUserMapper;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class AppUserService {
@@ -28,11 +24,25 @@ public class AppUserService {
     @Autowired
     MessageSource messageSource;
 
+    @Autowired
+    BCryptPasswordEncoder bCrypt;
+    public String hasPassword(String password) {
+        return bCrypt.encode(password);
+    }
+
+
     public ResponseEntity<AppUserEntity> save(AppUserEntity userReq) {
+        userReq.setPassword(hasPassword(userReq.getPassword()));
         AppUserEntity  user = iAppUserRepository.save(userReq);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+
+    @Transactional(readOnly = true)
+    public AppUserEntity findByEmail(String email) {
+        return iAppUserRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("user.notfound", new Object[]{email},
+                Locale.getDefault())));
+    }
 
     public ResponseEntity<List<AppUserEntity>>get() {
         List<AppUserEntity> user =   iAppUserRepository.findAll();
